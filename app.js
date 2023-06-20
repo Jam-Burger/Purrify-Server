@@ -15,7 +15,11 @@ app.get('/', (req, res) => {
 })
 
 app.get('/callback', (req, res) => {
-    res.status(200).send("Login Page");
+    const { code } = req.query
+    if (code)
+        res.status(200).send(code)
+    else
+        res.status(404).send('Code not found')
 })
 
 app.post('/token-request', async (req, res) => {
