@@ -1,36 +1,52 @@
 const express = require("express")
+const bodyParser = require('body-parser');
+const axios = require('axios');
 
-const PORT = process.env.PORT || 3000;
+const { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI } = require('./config')
+
 const app = express()
 
 app.use(express.json())
-app.listen(PORT, () => {
-    console.log(`server is running on http://localhost:${PORT}`)
-})
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 app.get('/', (req, res) => {
     res.status(200).send("Welcome to Purrify")
 })
 
-app.post('/login', (req, res) => {
-    const { data } = req.body
-    console.log("Login Post request with data : " + data)
-    if (data)
-        res.status(200).json({ success: true, data: data })
-    else
-        res.status(404).json({ success: false, message: "no data provided" })
+app.get('/callback', (req, res) => {
+    res.status(200).send("Welcome to Login")
 })
 
-app.post('/token-request', (req, res) => {
-    const { data } = req.body
-    console.log("Login Post request with data : " + data)
-    if (data)
-        res.status(200).json({ success: true, data: data })
-    else
-        res.status(404).json({ success: false, message: "no data provided" })
+app.post('/token-request', async (req, res) => {
+    const { code } = req.body
+    console.log("token request with code : " + code)
+    try {
+        const response = await axios.post('https://accounts.spotify.com/api/token', null, {
+            params: {
+                grant_type: 'authorization_code',
+                code,
+                redirect_uri: REDIRECT_URI,
+            },
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                Authorization: `Basic ${Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')}`,
+            },
+        })
+        const { access_token } = response.data;
+        res.send(access_token);
+    } catch (error) {
+        console.error('Failed to obtain access token:', error);
+        res.status(500).send('Failed to obtain access token.')
+    }
 })
 
 app.get('/api', (req, res) => {
-    console.log("Api get request");
+    console.log("Api request");
     res.status(200).send("Purrify API")
+})
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`server is running on http://localhost:${PORT}`)
 })
