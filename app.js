@@ -27,7 +27,7 @@ app.post('/token-request', (req, res) => {
     else
         res.status(404).json({ success: false, message: "no data provided" })
 })
-app.get('/token-request', (req, res) => {
+app.get('/api', (req, res) => {
     console.log("Api get request");
     res.status(200).send("Purrify API")
 })
