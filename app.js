@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
     res.status(200).send("Welcome to Purrify")
 })
 
-app.post('/callback', (req, res) => {
+app.get('/callback', (req, res) => {
     res.status(200).send("Login Page");
 })
 
