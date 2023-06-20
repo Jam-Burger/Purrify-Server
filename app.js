@@ -14,8 +14,13 @@ app.get('/', (req, res) => {
     res.status(200).send("Welcome to Purrify")
 })
 
-app.get('/callback', (req, res) => {
-    res.status(200).send("Welcome to Login")
+app.post('/login', (req, res) => {
+    const { data } = req.body
+    console.log("Login Post request with data : " + data)
+    if (data)
+        res.status(200).json({ success: true, data: data })
+    else
+        res.status(404).json({ success: false, message: "no data provided" })
 })
 
 app.post('/token-request', async (req, res) => {
