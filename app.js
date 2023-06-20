@@ -13,18 +13,18 @@ app.get('/', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-    const data = req.body
+    const { data } = req.body
     console.log("Login Post request with data : " + data)
-    if (data === {})
+    if (data)
         res.status(200).json({ success: true, data: data })
     else
         res.status(404).json({ success: false, message: "no data provided" })
 })
 
 app.post('/token-request', (req, res) => {
-    const data = req.body
+    const { data } = req.body
     console.log("Login Post request with data : " + data)
-    if (data === {})
+    if (data)
         res.status(200).json({ success: true, data: data })
     else
         res.status(404).json({ success: false, message: "no data provided" })
