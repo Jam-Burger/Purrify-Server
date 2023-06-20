@@ -11,6 +11,7 @@ app.listen(PORT, () => {
 app.get('/', (req, res) => {
     res.status(200).send("Welcome to Purrify")
 })
+
 app.post('/login', (req, res) => {
     const data = req.body
     console.log("Login Post request with data : " + data)
@@ -19,6 +20,7 @@ app.post('/login', (req, res) => {
     else
         res.status(404).json({ success: false, message: "no data provided" })
 })
+
 app.post('/token-request', (req, res) => {
     const data = req.body
     console.log("Login Post request with data : " + data)
@@ -27,6 +29,7 @@ app.post('/token-request', (req, res) => {
     else
         res.status(404).json({ success: false, message: "no data provided" })
 })
+
 app.get('/api', (req, res) => {
     console.log("Api get request");
     res.status(200).send("Purrify API")
