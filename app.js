@@ -17,12 +17,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/callback', (req, res) => {
-    const code= window.location.hash.split('=')[1]
-    console.log(window.location.hash.split('=')[1])
-    if (code) 
-        res.send(code)
-    else
-        res.status(404).send('Code not found')
+    res.send('Success')
 })
 
 const PORT = process.env.PORT || 3000;
