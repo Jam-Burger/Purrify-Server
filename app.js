@@ -3,9 +3,9 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 require('dotenv').config();
 
-const CLIENT_ID= process.env.CLIENT_ID
-const CLIENT_SECRET= process.env.CLIENT_SECRET
-const REDIRECT_URI= 'https://purrify.onrender.com/callback'
+const CLIENT_ID = process.env.CLIENT_ID
+const CLIENT_SECRET = process.env.CLIENT_SECRET
+const REDIRECT_URI = 'https://purrify.onrender.com/callback'
 
 const app = express()
 
@@ -17,39 +17,13 @@ app.get('/', (req, res) => {
 })
 
 app.get('/callback', (req, res) => {
-    const { code } = req.query
-    if (code)
-        res.status(200).send(code)
+    const code= req.headers.location
+    console.log(req.headers)
+    if (code) {
+        res.send(code)
+    }
     else
         res.status(404).send('Code not found')
-})
-
-app.post('/token-request', async (req, res) => {
-    const { code } = req.body
-    console.log("token request with code : " + code)
-    try {
-        const response = await axios.post('https://accounts.spotify.com/api/token', null, {
-            params: {
-                grant_type: 'authorization_code',
-                code,
-                redirect_uri: REDIRECT_URI,
-            },
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                Authorization: `Basic ${Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')}`,
-            },
-        })
-        const { access_token } = response.data;
-        res.send(access_token);
-    } catch (error) {
-        console.error('Failed to obtain access token:', error);
-        res.status(500).send('Failed to obtain access token.')
-    }
-})
-
-app.get('/api', (req, res) => {
-    console.log("Api request");
-    res.status(200).send("Purrify API")
 })
 
 const PORT = process.env.PORT || 3000;
